@@ -1,55 +1,82 @@
 JawboneUP API
 
 This is a wrapper for the Jawbone UP API. 
-It has convenience methods for 
+It has convenience methods for auth, access token, refresh token, and api calls.
+
+For terminologies, refer to the documentation here:
+https://jawbone.com/up/developer/authentication
 
 Usage: 
 
     from jawbone import Jawbone
-
-
     jb = Jawbone(client_id, client_secret, redirect_uri, scope='')
 
-scope, by default is 'basic_read', which can be overridden by passing 
-scope argument
+The app can be authorized for accessing specific data using the "scope"
+The parameter “scope”, by default is 'basic_read', which can be set as per the application’s requirements.
+Multiple scopes can be authorized by using space delimiters. 
+
+To see the list of available scopes, refer:
+https://jawbone.com/up/developer/authentication
+(under the heading The “scopes” allowed by the system are)
+
+So, to use the package:
+
+1. Initialization:
+
+    jb = Jawbone(client_id, client_secret, redirect_uri, scope='basic_read extended_read')
+
+To make calls on behalf of the user, refer this documentation:
+https://jawbone.com/up/developer/authentication
 
 To get the authorization token:
 
-    jb.auth() #Can override the scope during auth if not during init
+    jb.auth() 
 
 
-This generates the authentication URL. Upon successful login and authorization, 
-get the code that is responded as a GET parameter.
+This call fetches the authentication URL. You should redirect the user to the generated authentication url. Upon successful authorization, the user is redirected to the “redirect_uri” specified. The “code” is specified as a GET parameter.
+
+If there was an error, the response would be to the “redirect_uri” with GET parameter “error” 
+
+
+2. Access Token
 
 Once we have the code, you can get the auth code by calling 
 
     token = jb.access_token(code)
 	
-Save the generated token responded as a json object
+Save the generated token response json.
 
-The main components of the response:
+The response, if 200 has the following components as json:
 
 access_token, token_type, expires_at, refresh_token
 
+Store these in the database, for future api calls.
 
-Now to call, lets say the UP api for sleep, 
+3. Refresh Token
 
-    jb.api_call(access_token, endpoint)
+The generated token from the above step has an expiry of 1 year. 
+The refresh token provided as a part of the access_token() call, can be used to obtain the new credentials 
 
-A response with status_code (200, 400, etc). 
-Parse the json for the data
+    response = jb.refresh_token_call(refresh_code)
 
-The auth token would have an expiry of 1 year. Once the access token is expired, 
-the same could be updated using: 
 
-    jb.refresh_token_call(refresh_code)
+4. API Calls
 
-The refresh code would be returned by the auth() call.
+api_call is a generic method for calling any endpoint.
+Documentation on endpoints here:
+https://jawbone.com/up/developer/endpoints
+
+To make an API call to get sleep data: 
+
+    endpoint = nudge/api/v.1.0/sleep
+    response = jb.api_call(access_token, endpoint)
+
+A response is a json with status_code (200, 400, etc). Parse the json for the response data
+If response.status == 200, the response.get(“error”) contains the message. 
+
 	
 
-The dependencies are:
+The library dependencies include:
 
     urllib
     requests
-
-
