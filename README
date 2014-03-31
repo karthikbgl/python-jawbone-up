@@ -1,0 +1,55 @@
+JawboneUP API
+
+This is a wrapper for the Jawbone UP API. 
+It has convenience methods for 
+
+Usage: 
+
+    from jawbone import Jawbone
+
+
+    jb = Jawbone(client_id, client_secret, redirect_uri, scope='')
+
+scope, by default is 'basic_read', which can be overridden by passing 
+scope argument
+
+To get the authorization token:
+
+    jb.auth() #Can override the scope during auth if not during init
+
+
+This generates the authentication URL. Upon successful login and authorization, 
+get the code that is responded as a GET parameter.
+
+Once we have the code, you can get the auth code by calling 
+
+    token = jb.access_token(code)
+	
+Save the generated token responded as a json object
+
+The main components of the response:
+
+access_token, token_type, expires_at, refresh_token
+
+
+Now to call, lets say the UP api for sleep, 
+
+    jb.api_call(access_token, endpoint)
+
+A response with status_code (200, 400, etc). 
+Parse the json for the data
+
+The auth token would have an expiry of 1 year. Once the access token is expired, 
+the same could be updated using: 
+
+    jb.refresh_token_call(refresh_code)
+
+The refresh code would be returned by the auth() call.
+	
+
+The dependencies are:
+
+    urllib
+    requests
+
+
