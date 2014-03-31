@@ -8,9 +8,9 @@ setup(
     ],
 
     description='Jawbone UP API python wrapper',
-    url='http://github.com/storborg/funniest',
+    url='https://github.com/karthikbgl/python-jawbone-up',
     author='Karthik Ravindra',
     author_email='karthikbgl@gmail.com',
-    packages=['jawbone-up'],
+    packages=['jawbone'],
     zip_safe=False
 )
