@@ -8,7 +8,11 @@ Just do
     from jawbone.jawbone import Jawbone
     
 There are a few other bugs like https: v/s http: header, which would resolve soon (hopefully :) )
+Or just include this version (on github) and add the following line in __init__.py
 
+    from .jawbone import Jawbone
+
+    
 
 JawboneUP API
 
@@ -20,7 +24,7 @@ https://jawbone.com/up/developer/authentication
 
 Usage: 
 
-    from jawbone import Jawbone
+    from jawbone import Jawbone 
     jb = Jawbone(client_id, client_secret, redirect_uri, scope='')
 
 The app can be authorized for accessing specific data using the "scope"
