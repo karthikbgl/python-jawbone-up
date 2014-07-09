@@ -1,3 +1,15 @@
+NOTE: There is a bug in the PyPi version of this library. 
+Instead of 
+
+    from jawbone import Jawbone
+
+Just do
+
+    from jawbone.jawbone import Jawbone
+    
+There are a few other bugs like https: v/s http: header, which would resolve soon (hopefully :) )
+
+
 JawboneUP API
 
 This is a wrapper for the Jawbone UP API. 
